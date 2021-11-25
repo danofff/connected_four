@@ -26,7 +26,7 @@ function initiateGame() {
   //initiate start game state
   gameState.board = generateNewBoard();
   gameState.turn = false;
-  isGameFinished = false;
+  gameState.isGameFinished = false;
   gameState.allDomCols = document.querySelectorAll(".column");
 
   //delete and set eventListener to the reset button
@@ -191,11 +191,14 @@ function freezeTheGame() {
 }
 
 function resetButtonClick() {
-  cleanDOM();
   initiateGame();
+  cleanDOM();
 }
 
 function cleanDOM() {
+  playersTurn.classList.remove('winner-red');
+  playersTurn.classList.remove('winner-yellow');
+  playersTurn.innerText = `Player's ${+gameState.turn + 1} turn`;
   document.querySelectorAll('.row').forEach(cell => {
     cell.classList.remove(gameState.players[0]);
     cell.classList.remove(gameState.players[1]);
