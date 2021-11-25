@@ -134,7 +134,6 @@ function checkAllRows() {
 }
 
 function checkAllDiagonels() {
-  // let quantityOfDiagonals = gameState.rowsQuantity + gameState.columnsQuantity - 1;
   let result = false;
 
   //minor  diagonals checking
