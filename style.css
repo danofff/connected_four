@@ -51,7 +51,6 @@ h2 {
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;
-  margin: 1.5rem 0;
 }
 
 h1 {
@@ -60,10 +59,11 @@ h1 {
 
 h2 {
   font-size: 28px;
+  margin: 0;
 }
 
 .box {
-  margin: 0 auto;
+  margin: 1rem auto;
   width: 675px;
   display: flex;
   align-items: center;
@@ -96,5 +96,10 @@ button#reset:active {
 }
 .winner-red {
   color: #ff2400;
+  text-shadow: 1px 1px 3px #000;
+}
+
+.draw {
+  color: #008013;
   text-shadow: 1px 1px 3px #000;
 }

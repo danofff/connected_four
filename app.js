@@ -1,6 +1,6 @@
 //some DOM elements
 const playersTurn = document.querySelector("#players-turn");
-const resetButton = document.querySelector('#reset');
+const resetButton = document.querySelector("#reset");
 
 const gameState = {
   players: ["player1", "player2"],
@@ -10,6 +10,7 @@ const gameState = {
   allDomCols: [],
   positionsToWinQuantity: 4,
   isGameFinished: false,
+  playersNames: [],
 };
 
 initiateGame();
@@ -28,10 +29,13 @@ function initiateGame() {
   gameState.turn = false;
   gameState.isGameFinished = false;
   gameState.allDomCols = document.querySelectorAll(".column");
+  gameState.playersNames = askForPlayersNames();
+  setPlayersTurnHeader();
 
+  gameState.numberOfSteps = gameState.columnsQuantity * gameState.rowsQuantity;
   //delete and set eventListener to the reset button
-  resetButton.removeEventListener('click', resetButtonClick);
-  resetButton.addEventListener('click', resetButtonClick);
+  resetButton.removeEventListener("click", resetButtonClick);
+  resetButton.addEventListener("click", resetButtonClick);
 
   onBoardClick();
 }
@@ -56,6 +60,8 @@ function handleColumnClick(event) {
     return;
   }
 
+  gameState.numberOfSteps--;
+
   //identify availiable row number and push player number to columns array
   let filledRowNumber =
     gameState.rowsQuantity -
@@ -71,14 +77,22 @@ function handleColumnClick(event) {
   //checking for the win
   if (checkForWin()) {
     freezeTheGame();
-    playersTurn.innerText = `Player ${+gameState.turn + 1} is a WINNER!!!`;
-    gameState.turn ? playersTurn.classList.add('winner-yellow'): playersTurn.classList.add('winner-red');
+    playersTurn.textContent = `${
+      gameState.playersNames[+gameState.turn]
+    } is a WINNER!!!`;
+    gameState.turn
+      ? playersTurn.classList.add("winner-yellow")
+      : playersTurn.classList.add("winner-red");
     return;
   }
-
+  if (gameState.numberOfSteps === 0) {
+    freezeTheGame();
+    playersTurn.textContent = `It's a draw`;
+    playersTurn.classList.add("draw");
+  }
   //change a player
   gameState.turn = !gameState.turn;
-  changePlayersTurn();
+  setPlayersTurnHeader();
 }
 
 function checkForWin() {
@@ -181,8 +195,8 @@ function checkFourForWin(one, two, three, four) {
   return one === two && one === three && one === four;
 }
 
-function changePlayersTurn() {
-  playersTurn.innerText = `Player's ${+gameState.turn + 1} turn`;
+function setPlayersTurnHeader() {
+  playersTurn.innerText = `${gameState.playersNames[+gameState.turn]}'s turn`;
 }
 
 function freezeTheGame() {
@@ -195,11 +209,17 @@ function resetButtonClick() {
 }
 
 function cleanDOM() {
-  playersTurn.classList.remove('winner-red');
-  playersTurn.classList.remove('winner-yellow');
-  playersTurn.innerText = `Player's ${+gameState.turn + 1} turn`;
-  document.querySelectorAll('.row').forEach(cell => {
+  playersTurn.classList.remove("winner-red");
+  playersTurn.classList.remove("winner-yellow");
+  playersTurn.classList.remove("draw");
+  playersTurn.textContent = `${gameState.playersNames[+gameState.turn]}'s turn`;
+  document.querySelectorAll(".row").forEach((cell) => {
     cell.classList.remove(gameState.players[0]);
     cell.classList.remove(gameState.players[1]);
-  })
+  });
+}
+function askForPlayersNames() {
+  const player1 = prompt("Enter first player name", "RED") || "RED";
+  const player2 = prompt("Enter second player name", "YELLOW") || "YELLOW";
+  return [player1, player2];
 }
